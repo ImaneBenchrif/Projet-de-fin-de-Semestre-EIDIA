@@ -187,7 +187,7 @@ def Question9(year):
 Quest10 = '''10. Créer un pandas dataFrame df4 qui contient pour tous les points (P1→P9) pour les 2
 années 2016 et 2017 seulment les valeurs des IQE (WAWQI, WGWQI et OWQI) ainsi que
 les qualités correspondante.'''
-code_Question10 = '''def Question10(df,year):
+code_Question10 = '''def Question10(year):
     df3 = Question3(year)
     df6 = Question6(year)
     df3.index = df6.index
