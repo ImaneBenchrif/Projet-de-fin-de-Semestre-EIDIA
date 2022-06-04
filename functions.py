@@ -20,13 +20,15 @@ def WAWQIpH(Cph,wi):
     WQIph = Wi * Qi
     return WQIph
 
-def Question2(df,year):
+def Question2(year):
+    df = Question1('WaterQuality1.xlsx')
     df = df.loc[df['Year'] == year]  # pour chaque point (P1→P9) <=> Year = 2016
     myList = [(df.Temperature, 30, 1), (df.DCO, 90, 3), (df.DBO5, 3, 4), (df.O2_DISSOUS, 5, 5),
               (df.CONDUCTIVITE, 1000, 4), (df.MES, 20, 2), (df.TURBIDITE, 5, 2), (df.NITRITE, 0.5, 5),
               (df.NITRATE, 50, 5), (df.AMMONIUM, 0.5, 5), (df.PHOSPHATE, 5, 5)]
 
     WAWQI1 = WAWQIpH(df.pH,4)
+
     for i in myList:
         WAWQI1 = WAWQI1 + WAWQI(i[0],i[2],i[1])
 
@@ -47,8 +49,8 @@ def Quality_results(WAWQi):
     elif WAWQi > 300:
         return "Unsuitable for drinking"
 
-def Question3(df,year):
-    df = Question2(df,year)
+def Question3(year):
+    df = Question2(year)
     list_des_qualites = [Quality_results(x) for x in df['WAWQI']]
     df['QualiteWAWQI'] = list_des_qualites
     return df
@@ -72,7 +74,8 @@ def WGWQIph(Cph,wi):
     WGWQiph=Qi**Wi
     return WGWQiph
 
-def Question5(df1,year,):
+def Question5(year,):
+    df1 = Question4('WaterQuality1.xlsx')
     df1 = df1.loc[df1['Year'] == year]  # pour chaque point (P1→P9) <=> Year = 2016
     myList = [(df1.Temperature, 30, 1), (df1.DCO, 90, 3), (df1.DBO5, 3, 4), (df1.O2_DISSOUS, 5, 5),
               (df1.CONDUCTIVITE, 1000, 4), (df1.MES, 20, 2), (df1.TURBIDITE, 5, 2), (df1.NITRITE, 0.5, 5),
@@ -99,8 +102,8 @@ def Quality_results_WGWQI(WGWQi):
     elif WGWQi >=0 and WGWQi <= 24:
         return "Very Bad"
 
-def Question6(df1,year):
-    df1 = Question5(df1,year)
+def Question6(year):
+    df1 = Question5(year)
     list_des_qualites = [Quality_results_WGWQI(x) for x in df1['WGWQI']]
     df1['QualiteWGWQI'] = list_des_qualites
     return df1
@@ -124,7 +127,8 @@ def SIph(Cph,wi):
     SIiph= Wi*Qi
     return 1/(SIiph)**2
 
-def Question8(df2,year,):
+def Question8(year,):
+    df2 = Question7('WaterQuality1.xlsx')
     df2 = df2.loc[df2['Year'] == year]  # pour chaque point (P1→P9) <=> Year = 2016
     myList = [(df2.Temperature, 30, 1), (df2.DBO5, 3, 4), (df2.O2_DISSOUS, 5, 5),
               (df2.NITRATE, 50, 5), (df2.AMMONIUM, 0.5, 5), (df2.PHOSPHATE, 5, 5),(df2.FC,594,5)]
@@ -151,18 +155,18 @@ def Quality_results_OWQI(OWQI):
     elif OWQI >= 0 and OWQI <= 59:
         return "Very Poor"
 
-def Question9(df2,year):
-    df2 = Question8(df2,year)
+def Question9(year):
+    df2 = Question8(year)
     list_des_qualites = [Quality_results_OWQI(x) for x in df2['OWQI']]
     df2['QualiteOWQI'] = list_des_qualites
     return df2
 
-def Question10(df,year):
-    df3 = Question3(df,year)
-    df6 = Question6(df,year)
+def Question10(year):
+    df3 = Question3(year)
+    df6 = Question6(year)
     df3.index = df6.index
     df3[['WGWQI', 'QualiteWGWQI']] = df6[['WGWQI', 'QualiteWGWQI']]
-    df9 = Question9(df, year)
+    df9 = Question9(year)
     df3.index = df9.index
     df3[['OWQI', 'QualiteOWQI']] = df9[['OWQI', 'QualiteOWQI']]
     df10 = df3
