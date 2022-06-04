@@ -60,8 +60,8 @@ code_Question3 = '''def Quality_results(WAWQi):
     elif WAWQi > 300:
         return "Unsuitable for drinking"
 
-def Question3(df,year):
-    df = Question2(df,year)
+def Question3(year):
+    df = Question2(year)
     list_des_qualités = [Quality_results(x) for x in df['WAWQI']]
     df['Quality '] = list_des_qualités
     return df '''
@@ -89,7 +89,8 @@ def WGWQIph(Cph,wi):
     WGWQiph=Qi**Wi
     return WGWQiph
 
-def Question5(df1,year,):
+def Question5(year,):
+    df1 = Question4('WaterQuality1.xlsx')
     df1 = df1.loc[df1['Year'] == year]  # pour chaque point (P1→P9) <=> Year = 2016
     myList = [(df1.Temperature, 30, 1), (df1.DCO, 90, 3), (df1.DBO5, 3, 4), (df1.O2_DISSOUS, 5, 5),
               (df1.CONDUCTIVITE, 1000, 4), (df1.MES, 20, 2), (df1.TURBIDITE, 5, 2), (df1.NITRITE, 0.5, 5),
@@ -117,10 +118,10 @@ code_Question6 = '''def Quality_results_WGWQI(WGWQi):
     elif WGWQi >=0 and WGWQi <= 24:
         return "Very Bad"
 
-def Question6(df1,year):
-    df1 = Question5(df1,year)
-    list_des_qualités = [Quality_results_WGWQI(x) for x in df1['WGWQI']]
-    df1['QualiteWGWQI'] = list_des_qualités
+def Question6(year):
+    df1 = Question5(year)
+    list_des_qualites = [Quality_results_WGWQI(x) for x in df1['WGWQI']]
+    df1['QualiteWGWQI'] = list_des_qualites
     return df1'''
 
 Quest7 = '''7-Importer une autre fois le fichier « WaterQuality.xlsx » avec le module pandas,nommer le df2.'''
@@ -147,7 +148,8 @@ def SIph(Cph,wi):
     SIiph= Wi*Qi
     return 1/(SIiph)**2
 
-def Question8(df2,year,):
+def Question8(year,):
+    df2 = Question7('WaterQuality1.xlsx')
     df2 = df2.loc[df2['Year'] == year]  # pour chaque point (P1→P9) <=> Year = 2016
     myList = [(df2.Temperature, 30, 1), (df2.DBO5, 3, 4), (df2.O2_DISSOUS, 5, 5),
               (df2.NITRATE, 50, 5), (df2.AMMONIUM, 0.5, 5), (df2.PHOSPHATE, 5, 5),(df2.FC,594,5)]
@@ -176,21 +178,21 @@ code_Question9 = '''def Quality_results_OWQI(OWQI):
     elif OWQI >= 0 and OWQI <= 59:
         return "Very Poor"
 
-def Question9(df2,year):
-    df2 = Question8(df2,year)
-    list_des_qualités = [Quality_results_OWQI(x) for x in df2['OWQI']]
-    df2['QualiteOWQI'] = list_des_qualités
+def Question9(year):
+    df2 = Question8(year)
+    list_des_qualites = [Quality_results_OWQI(x) for x in df2['OWQI']]
+    df2['QualiteOWQI'] = list_des_qualites
     return df2'''
 
 Quest10 = '''10. Créer un pandas dataFrame df4 qui contient pour tous les points (P1→P9) pour les 2
 années 2016 et 2017 seulment les valeurs des IQE (WAWQI, WGWQI et OWQI) ainsi que
 les qualités correspondante.'''
 code_Question10 = '''def Question10(df,year):
-    df3 = Question3(df,year)
-    df6 = Question6(df,year)
+    df3 = Question3(year)
+    df6 = Question6(year)
     df3.index = df6.index
     df3[['WGWQI', 'QualiteWGWQI']] = df6[['WGWQI', 'QualiteWGWQI']]
-    df9 = Question9(df, year)
+    df9 = Question9(year)
     df3.index = df9.index
     df3[['OWQI', 'QualiteOWQI']] = df9[['OWQI', 'QualiteOWQI']]
     df10 = df3
@@ -276,14 +278,14 @@ if "WAWQI" in option:
         else:
             year = 2017
 
-        df2 = Question2(df,year)
+        df2 = Question2(year)
         st.write("l'indice WAWQI pour l'année choisi : ")
         st.dataframe(df2.style.applymap(color_df, subset=['WAWQI'],color = '#6CBCBF'))
 
         with st.expander(Quest3):
             st.code(code_Question3, language='python')
 
-        df3 = Question3(df,year)
+        df3 = Question3(year)
         st.dataframe(df3.style.applymap(color_quality_WAWQI, subset=['QualiteWAWQI']))
 
 if "WGWQI" in option:
@@ -314,14 +316,14 @@ if "WGWQI" in option:
             year = 2016
         else:
             year = 2017
-        df5 = Question5(df1,year)
+        df5 = Question5(year)
         st.write("l'indice WGWQI pour l'année choisi : ")
         st.dataframe(df5.style.applymap(color_df, subset=['WGWQI'],color='#96D7C6'))
 
         with st.expander(Quest6):
             st.code(code_Question6, language='python')
 
-        df6 = Question6(df1,year)
+        df6 = Question6(year)
         st.dataframe(df6.style.applymap(color_quality_WGWQI, subset=['QualiteWGWQI']))
 
 if "OWQI" in option:
@@ -352,29 +354,29 @@ if "OWQI" in option:
             year = 2016
         else:
             year = 2017
-        df9 = Question8(df2,year)
+        df9 = Question8(year)
         st.write("l'indice OWQI pour l'année choisi : ")
         st.dataframe(df9.style.applymap(color_df, subset=['OWQI'],color='#5AA7A7'))
 
         with st.expander(Quest9):
             st.code(code_Question9, language='python')
 
-        df9 = Question9(df2,year)
+        df9 = Question9(year)
         st.dataframe(df9.style.applymap(color_quality_OWQI, subset=['QualiteOWQI']))
 
-val = all(i in ['WAWQI','WGWQI','OWQI'] for i in option)
-if val and (agree or uploaded_file):
-    with st.expander(Quest10):
-        st.code(code_Question10, language='python')
+if 'WAWQI' in option and  'WGWQI' in option and 'OWQI' in option:
+    if uploaded_file or agree:
+        with st.expander(Quest10):
+            st.code(code_Question10, language='python')
 
-    ab = st.selectbox("Choisissez 2016 ou 2017 pour afficher les valeurs des IQE (WAWQI, WGWQI et OWQI) ansi que les qualités correspondante.", ('2016', '2017'), key='key3')
-    if ab == '2016':
-        year = 2016
-    else:
-        year = 2017
+        ab = st.selectbox("Choisissez 2016 ou 2017 pour afficher les valeurs des IQE (WAWQI, WGWQI et OWQI) ansi que les qualités correspondante.", ('2016', '2017'), key='key3')
+        if ab == '2016':
+            year = 2016
+        else:
+            year = 2017
 
-    df = Question1('WaterQuality1.xlsx')
-    df10 = Question10(df,year)
-    st.write("l'indice IQE (WAWQI, WGWQI et OWQI) pour l'année choisi : ")
-    st.dataframe(df10)
+        df = Question1('WaterQuality1.xlsx')
+        df10 = Question10(year)
+        st.write("l'indice IQE (WAWQI, WGWQI et OWQI) pour l'année choisi : ")
+        st.dataframe(df10)
 
